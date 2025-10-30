@@ -47,19 +47,27 @@ final class Arg extends Annotation
     public $default;
 
     /**
+     * Validation constraints.
+     *
+     * @var array<string, mixed>
+     */
+    public $validation;
+
+    /**
      * @param string      $name          The name of the argument
      * @param string      $type          The type of the argument
      * @param string|null $description   The description of the argument
      * @param mixed|null  $defaultValue  Default value of the argument
      * @param mixed|null  $default       Default value of the argument (deprecated, use $defaultValue instead)
      */
-    public function __construct(string $name, string $type, ?string $description = null, $defaultValue = null, $default = null)
+    public function __construct(string $name, string $type, ?string $description = null, $defaultValue = null, $default = null, $validation = [])
     {
         $this->name = $name;
         $this->description = $description;
         $this->type = $type;
         $this->defaultValue = $defaultValue;
         $this->default = $default;
+        $this->validation = $validation;
 
         if ($this->defaultValue === null && $this->default !== null) {
             @trigger_error(sprintf("%s %s %s", 'overblog/graphql-bundle', '1.3', 'The "default" attribute on @GQL\Arg or #GQL\Arg is deprecated, use "defaultValue" instead.'), E_USER_DEPRECATED);

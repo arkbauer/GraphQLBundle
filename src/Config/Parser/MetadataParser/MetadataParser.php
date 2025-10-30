@@ -614,6 +614,17 @@ abstract class MetadataParser implements PreParserInterface
                 @trigger_error(sprintf('%s %s %s', 'overblog/graphql-bundle', '1.3', 'The "default" attribute on @GQL\Arg or #GQL\Arg is deprecated, use "defaultValue" instead.'), E_USER_DEPRECATED);
                 $args[$arg->name]['defaultValue'] = $arg->default;
             }
+
+            if (!empty($arg->validation)) {
+                $args[$arg->name]['validation'] = array_map(static function ($assertion){
+                    if (is_string($assertion)) {
+                        return [$assertion => ['groups' => []]];
+                    }
+
+                    // TODO: might need to convert string to constraints
+                    return $assertion;
+                }, $arg->validation);
+            }
         }
 
         if ($reflector instanceof ReflectionMethod) {
